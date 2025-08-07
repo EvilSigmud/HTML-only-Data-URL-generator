@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Blob and data urls and open file</title>
+  <style>
+  #dataURLDisplay {
+      margin: 20px;
+      white-space: pre-wrap;
+      border: 1px solid #ccc;
+      padding: 10px;
+      background: #f8f8f8;
+    }
+    #blobURLDisplay {
+      margin: 20px;
+      white-space: pre-wrap;
+      border: 1px solid #ccc;
+      padding: 10px;
+      background: #f8f8f8;
+    }
+    #openFileBtn {
+      margin-left: 10px;
+    }
+/*BELOW IS NOT MY WORK it was made by html best codes - htmlbestcodes.com - the infinite squares background*/
+    @import url(https://fonts.googleapis.com/css?family=Exo:100);
+
+@-webkit-keyframes bg-scrolling-reverse {
+100% {
+background-position: 50px 50px;
+}
+}
+
+@-moz-keyframes bg-scrolling-reverse {
+100% {
+background-position: 50px 50px;
+}
+}
+
+@-o-keyframes bg-scrolling-reverse {
+100% {
+background-position: 50px 50px;
+}
+}
+
+@keyframes bg-scrolling-reverse {
+100% {
+background-position: 50px 50px;
+}
+}
+
+@-webkit-keyframes bg-scrolling {
+0% {
+background-position: 50px 50px;
+}
+}
+
+@-moz-keyframes bg-scrolling {
+0% {
+background-position: 50px 50px;
+}
+}
+
+@-o-keyframes bg-scrolling {
+0% {
+background-position: 50px 50px;
+}
+}
+
+@keyframes bg-scrolling {
+0% {
+background-position: 50px 50px;
+}
+}
+/* Main styles */
+body {
+color: #999;
+font: 400 16px/1.5 exo, ubuntu, "segoe ui", helvetica, arial, sans-serif;
+/* img size is 50x50 */
+background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAABnSURBVHja7M5RDYAwDEXRDgmvEocnlrQS2SwUFST9uEfBGWs9c97nbGtDcquqiKhOImLs/UpuzVzWEi1atGjRokWLFi1atGjRokWLFi1atGjRokWLFi1af7Ukz8xWp8z8AAAA//8DAJ4LoEAAlL1nAAAAAElFTkSuQmCC") repeat 0 0;
+-webkit-animation: bg-scrolling-reverse 0.92s infinite;
+/* Safari 4+ */
+-moz-animation: bg-scrolling-reverse 0.92s infinite;
+/* Fx 5+ */
+-o-animation: bg-scrolling-reverse 0.92s infinite;
+/* Opera 12+ */
+animation: bg-scrolling-reverse 0.92s infinite;
+/* IE 10+ */
+-webkit-animation-timing-function: linear;
+-moz-animation-timing-function: linear;
+-o-animation-timing-function: linear;
+animation-timing-function: linear;
+}
+/* ok end of infinite cubes, htmlbestcodes.com credit */
+  </style>
+</head>
+<body>
+  <label style="color:gray;" for="fileInput">Choose a file:</label>
+  <input style="color:gray;" id="fileInput" type="file" />
+  <button onclick="displayBlobURL()">Generate & Show URL</button>
+  <button onclick="generateDataURL()">Generate & Show Data URL</button>
+  <button id="openFileBtn" onclick="openFileInNewTab()">Open File</button>
+      <a target='_blank' href='https://www.htmlbestcodes.com/Infinite_Moving_Squares_for_HTML_Page_Background.htm' style='font-size: 8pt; text-decoration: none'>Html Best Codes made this cool background!</a>
+  <div id="blobURLDisplay" class="display">
+  <script>
+    let currentFileContent = '';
+
+    function displayBlobURL() {
+      const fileInput = document.getElementById('fileInput');
+      if (fileInput.files.length === 0) {
+        alert('Please select a file first.');
+        return;
+      }
+      
+      if (!fileInput.files[0]) {
+        alert('No file selected.');
+        return;
+      }
+      
+      const file = fileInput.files[0];
+      const blobURL = URL.createObjectURL(file);
+      
+      // Display the Blob URL
+      const display = document.getElementById('blobURLDisplay');
+      display.textContent = `${blobURL}`;
+      
+      // For revoking, store the URL for later if needed
+      // But for this use, keep it simple
+      
+      console.log('Generated Blob URL:', blobURL);
+    }
+
+    // Load the file content into memory to open it later
+    document.getElementById('fileInput').addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (!file) {
+        alert('You have not selected a file.');
+        currentFileContent = '';
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        currentFileContent = e.target.result;
+      };
+      reader.readAsText(file);
+    });
+
+    function openFileInNewTab() {
+      const fileInput = document.getElementById('fileInput');
+      if (fileInput.files.length === 0 || !currentFileContent) {
+        alert('Please select a file and wait for it to load.');
+        return;
+      }
+
+      // Open a new blank page
+      const newTab = window.open('about:blank');
+
+      // Write the file content into the new tab
+      if (newTab) {
+        newTab.document.open();
+        newTab.document.write(currentFileContent);
+        newTab.document.close();
+      } else {
+        alert('Popup blocked! Please allow popups for this site.');
+      }
+    }
+  </script>
+  <script>
+function generateDataURL() {
+      const fileInput = document.getElementById('fileInput');
+      if (fileInput.files.length === 0) {
+        alert('Please select a file first.');
+        return;
+      }
+
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        const dataURL = e.target.result;
+
+        // Display the Data URL
+        const display = document.getElementById('blobURLDisplay');
+        display.textContent = dataURL;
+      };
+
+      reader.readAsDataURL(file);
+    }
+  </script>
+</body>
+</html>
